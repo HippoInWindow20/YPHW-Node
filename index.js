@@ -44,6 +44,12 @@ const server = http.createServer(function(request, response) {
                 response.end(writeToJSON(splitted2[3], splitted2[5], splitted2[7]) + "\n Method: Save, Subject: " + splitted2[3] + ", Type: " + splitted2[5] + ", Content: " + splitted2[7])
             } else if (splitted2[1] == "del") {
                 response.end(delFromJSON(splitted2[3], splitted2[5], splitted2[7]) + "\n Method: Delete, Subject: " + splitted2[3] + ", Type: " + splitted2[5] + ", Content: " + splitted2[7])
+            } else if (splitted2[1] == "reinitialise") {
+                reinitialise()
+                response.end("Method: Reinitialise at " + new Date().toDateString())
+            } else if (splitted2[1] == "listdir") {
+                reinitialise()
+                response.end("Method: List Directory \n " + listDir())
             }
         })
     } else {
@@ -61,7 +67,7 @@ const server = http.createServer(function(request, response) {
 
 const port = 3000
 server.listen(port)
-console.log(`Listening at http://localhost:${port}`)
+console.log(`Server successfully started`)
 
 
 
@@ -198,4 +204,51 @@ function delFromJSON(subject, type, content) {
     } catch (e) {
         return e
     }
+}
+
+function reinitialise() {
+    if (checkExist() == true) {
+        try {
+            fs.unlinkSync(formatDate() + ".json")
+            writeEmpty()
+        } catch (e) {
+            console.log(e)
+        }
+
+    }
+
+}
+
+//Manage files
+function compareDates(datestring) {
+    var datestring1 = new Date(datestring.substring(0, 4), parseInt(datestring.substring(4, 6) - 1), datestring.substring(6, 8))
+    var datestring2 = new Date()
+    let difference = datestring2.getTime() - datestring1.getTime();
+    let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+    return TotalDays
+}
+
+function delUnused() {
+    var arr = fs.readdirSync("/", { withFileTypes: false });
+    for (var i = 0; i < arr.length; i++) {
+        if (compareDates(arr[i]) > 10) {
+            try {
+                fs.unlink(arr[i] + ".json")
+            } catch (e) {
+                return e
+            }
+        }
+    }
+}
+
+setInterval(delUnused, 120000)
+delUnused()
+
+function listDir() {
+    var y = fs.readdirSync("/", { withFileTypes: true })
+    var p = ""
+    for (var z = 0; z < y.length; z++) {
+        p += y[z].toString()
+    }
+    return p
 }
