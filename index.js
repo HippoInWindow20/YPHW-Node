@@ -229,7 +229,7 @@ function compareDates(datestring) {
 }
 
 function delUnused() {
-    var arr = fs.readdirSync("/", { withFileTypes: false });
+    var arr = fs.readdirSync(__dirname, { withFileTypes: false });
     for (var i = 0; i < arr.length; i++) {
         if (compareDates(arr[i]) > 10) {
             try {
@@ -245,10 +245,10 @@ setInterval(delUnused, 120000)
 delUnused()
 
 function listDir() {
-    var y = fs.readdirSync("/", { withFileTypes: true })
+    var y = fs.readdirSync(__dirname)
     var p = ""
     for (var z = 0; z < y.length; z++) {
-        p += y[z].toString()
+        p += y[z].toString() + "\n"
     }
     return p
 }
