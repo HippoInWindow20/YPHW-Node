@@ -42,6 +42,8 @@ const server = http.createServer(function(request, response) {
 
             } else if (splitted2[1] == "save") {
                 response.end(writeToJSON(splitted2[3], splitted2[5], splitted2[7]) + "\n Method: Save, Subject: " + splitted2[3] + ", Type: " + splitted2[5] + ", Content: " + splitted2[7])
+            } else if (splitted2[1] == "del") {
+                response.end(delFromJSON(splitted2[3], splitted2[5], splitted2[7]) + "\n Method: Delete, Subject: " + splitted2[3] + ", Type: " + splitted2[5] + ", Content: " + splitted2[7])
             }
         })
     } else {
@@ -179,6 +181,19 @@ function writeToJSON(subject, type, content) {
             file.append(subject + ".hw", content)
         else if (type == "test")
             file.append(subject + ".test", content)
+        file.save()
+    } catch (e) {
+        return e
+    }
+}
+
+function delFromJSON(subject, type, content) {
+    try {
+        let file = editJsonFile(formatDate() + `.json`)
+        if (type == "hw")
+            file.pop(subject + ".hw", content)
+        else if (type == "test")
+            file.pop(subject + ".test", content)
         file.save()
     } catch (e) {
         return e
