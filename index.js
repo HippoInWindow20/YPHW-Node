@@ -227,13 +227,13 @@ function reinitialise() {
 function compareDates(datestring) {
     var datestring1 = new Date(datestring.substring(0, 4), parseInt(datestring.substring(4, 6) - 1), datestring.substring(6, 8))
     var datestring2 = new Date()
-    let difference = datestring2.getTime() - datestring1.getTime();
-    let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+    let difference = datestring2.getTime() - datestring1.getTime()
+    let TotalDays = Math.ceil(difference / (1000 * 3600 * 24))
     return TotalDays
 }
 
 function delUnused() {
-    var arr = fs.readdirSync(__dirname, { withFileTypes: false });
+    var arr = fs.readdirSync(__dirname, { withFileTypes: false })
     for (var i = 0; i < arr.length; i++) {
         if (compareDates(arr[i]) > 10) {
             try {
