@@ -56,8 +56,12 @@ const server = http.createServer(function(request, response) {
         //GET Request
         var html = `
             <html>
+                <head>
+                    <title>Node server YPHS-HW</title>
+                </head>
                 <body>
-                    <p>Node server YPHS-HW</p>
+                    <h1>Node server YPHS-HW</h1>
+                    <h3>Ver 1.0 2022-09-29</h3>
                 </body>
             </html>`
         response.writeHead(200, { 'Content-Type': 'text/html' })
