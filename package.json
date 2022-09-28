@@ -1,0 +1,26 @@
+{
+  "name": "yphw-node",
+  "version": "1.0.0",
+  "description": "Node.js file server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HippoInWindow20/YPHW-Node.git"
+  },
+  "author": "Shippo Hsu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HippoInWindow20/YPHW-Node/issues"
+  },
+  "homepage": "https://github.com/HippoInWindow20/YPHW-Node#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "file-saver": "^2.0.5",
+    "http": "^0.0.1-security",
+    "querystring": "^0.2.1",
+    "url": "^0.11.0"
+  }
+}
