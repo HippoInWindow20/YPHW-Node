@@ -106,11 +106,12 @@ const server = http.createServer(function(request, response) {
             <html>
                 <head>
                     <title>Node server YPHS-HW</title>
+                    <meta charset='utf-8'>
                 </head>
-                <body>
+                <body style='font-family: sans-serif'>
                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
                     <h1>Node server YPHS-HW</h1>
-                    <h3>Ver 1.0 2022-09-29</h3>
+                    <h3>Ver 1.1 2022-10-1</h3>
                 </body>
             </html>`
         response.writeHead(200, { 'Content-Type': 'text/html' })
