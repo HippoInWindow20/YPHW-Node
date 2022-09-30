@@ -10,10 +10,10 @@ const server = http.createServer(function(request, response) {
         request.setEncoding("utf8");
 
 
-        // request.on('data', function(data) {
-        //     //When data is received
-        //     body += data
-        // })
+        request.on('data', function(data) {
+            //When data is received
+            body += data
+        })
         request.on('data', function() {
             response.setHeader('Access-Control-Allow-Origin', '*');
             response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -60,6 +60,7 @@ const server = http.createServer(function(request, response) {
                     <title>Node server YPHS-HW</title>
                 </head>
                 <body>
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
                     <h1>Node server YPHS-HW</h1>
                     <h3>Ver 1.0 2022-09-29</h3>
                 </body>
