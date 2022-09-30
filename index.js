@@ -10,11 +10,11 @@ const server = http.createServer(function(request, response) {
         request.setEncoding("utf8");
 
 
-        request.on('data', function(data) {
-            //When data is received
-            body += data
-        })
-        request.on('end', function() {
+        // request.on('data', function(data) {
+        //     //When data is received
+        //     body += data
+        // })
+        request.on('data', function() {
             response.setHeader('Access-Control-Allow-Origin', '*');
             response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
             //When receiving finished
