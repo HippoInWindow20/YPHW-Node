@@ -1,6 +1,7 @@
 const http = require('http')
 const fs = require('fs')
 const editJsonFile = require("edit-json-file");
+const path = require('path')
 
 const server = http.createServer(function(request, response) {
     console.dir(request.param)
@@ -19,8 +20,8 @@ const server = http.createServer(function(request, response) {
             response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
             //When receiving finished
             postData = decodeURIComponent(body);
-            response.writeHead(200, { 'Content-Type': 'text/html' })
-                // response.end(postData)
+
+            // response.end(postData)
             var splitted = postData.split("&")
             var splitted2 = []
             for (var x = 0; x < splitted.length; x++) {
@@ -29,27 +30,74 @@ const server = http.createServer(function(request, response) {
             }
             if (splitted2[1] == "retrieve") {
                 if (checkExist() == false) {
-                    response.end("File does not exist");
+                    response.end("File does not exist")
                 } else {
-                    fs.readFile(formatDate() + '.json', 'utf8', (err, data) => {
+                    fs.readFile('db/' + formatDate() + '.json', 'utf8', (err, data) => {
                         if (err) {
-                            console.error(err);
-                            return;
+                            console.error(err)
+                            return
                         }
-                        response.end(data);
-                    });
+                        response.writeHead(200, { 'Content-Type': 'application/json' })
+                        response.end(data)
+                    })
                 }
 
             } else if (splitted2[1] == "save") {
-                response.end(writeToJSON(splitted2[3], splitted2[5], splitted2[7]) + "\n Method: Save, Subject: " + splitted2[3] + ", Type: " + splitted2[5] + ", Content: " + splitted2[7])
+                response.writeHead(200, { 'Content-Type': 'text/html' })
+                response.end(writeToJSON(splitted2[3], splitted2[5], splitted2[7], splitted2[9]) + "\n Method: Save, Subject: " + splitted2[3] + ", Type: " + splitted2[5] + ", Content: " + splitted2[7])
             } else if (splitted2[1] == "del") {
+                response.writeHead(200, { 'Content-Type': 'text/html' })
                 response.end(delFromJSON(splitted2[3], splitted2[5], splitted2[7]) + "\n Method: Delete, Subject: " + splitted2[3] + ", Type: " + splitted2[5] + ", Content: " + splitted2[7])
             } else if (splitted2[1] == "reinitialise") {
                 reinitialise()
+                response.writeHead(200, { 'Content-Type': 'text/html' })
                 response.end("Method: Reinitialise at " + new Date().toDateString())
             } else if (splitted2[1] == "listdir") {
-                reinitialise()
+                response.writeHead(200, { 'Content-Type': 'text/html' })
                 response.end("Method: List Directory \n " + listDir())
+            } else if (splitted2[1] == "previous") {
+
+                var pathDB = path.join(__dirname, '/db')
+                var y = fs.readdirSync(pathDB)
+                var arr = []
+                for (var x = 0; x < y.length; x++) {
+                    if (path.extname(y[x]) == ".json") {
+                        arr.push(y[x])
+                    }
+                }
+                var arr2 = []
+                if (arr.length < 10) {
+                    for (var k = arr.length - 1; k >= 0; k--) {
+                        arr2[arr.length - k - 1] = arr[k]
+                    }
+                } else {
+                    for (var k = arr.length - 1; k >= arr.length - 10; k--) {
+                        arr2[arr.length - k - 1] = arr[k]
+                    }
+                }
+                var respp
+                if (splitted2[5].toString() == "false") {
+                    try {
+                        response.writeHead(200, { 'Content-Type': 'application/json' })
+                        respp = fs.readFileSync('db/' + arr2[splitted2[3]], 'utf8', (err, data) => {
+                            if (err) {
+                                console.error(err)
+                                return
+                            }
+                            return data
+                        })
+                    } catch (e) {
+                        console.log("Invalid Index: " + e)
+                    }
+                } else if (splitted2[5].toString() == "true") {
+                    response.writeHead(200, { 'Content-Type': 'text/html' })
+                    var p = ""
+                    for (var z = 0; z < arr2.length; z++) {
+                        p += arr2[z].toString() + "\n"
+                    }
+                    respp = "Method: Retrieve Previous 10 Items \n" + p
+                }
+                response.end(respp)
             }
         })
     } else {
@@ -79,7 +127,7 @@ console.log(`Server successfully started`)
 function checkExist() {
     var dec
     if (formatDate().length == 8) {
-        if (!fs.existsSync(formatDate() + ".json")) {
+        if (!fs.existsSync('db/' + formatDate() + ".json")) {
             dec = false
         } else {
             dec = true
@@ -105,6 +153,8 @@ function formatDate() {
     var dateString = year.toString() + month.toString() + day.toString()
     return dateString
 }
+
+
 
 function writeEmpty() {
     if (checkExist() == false) {
@@ -171,7 +221,7 @@ function writeEmpty() {
             }
         }`
 
-        fs.writeFile(formatDate() + '.json', content, err => {
+        fs.writeFile('db/' + formatDate() + '.json', content, err => {
             if (err) {
                 console.error(err)
             }
@@ -185,26 +235,47 @@ setInterval(checkExist, 120000)
 
 
 //parse JSON
-function writeToJSON(subject, type, content) {
+function writeToJSON(subject, type, content, expDate) {
     try {
-        let file = editJsonFile(formatDate() + `.json`)
-        if (type == "hw")
-            file.append(subject + ".hw", content)
-        else if (type == "test")
-            file.append(subject + ".test", content)
+        let file = editJsonFile('db/' + formatDate() + `.json`)
+        if (Date.parse(expDate) != NaN)
+            expDate = new Date(expDate)
+        if (type == "hw") {
+            if (expDate != NaN) {
+                file.append(subject + ".hw", [content, expDate])
+            } else {
+                file.append(subject + ".hw", [content, ""])
+            }
+        } else if (type == "test") {
+            if (expDate) {
+                file.append(subject + ".test", [content, expDate])
+            } else {
+                file.append(subject + ".test", [content, ""])
+            }
+        }
         file.save()
     } catch (e) {
         return e
     }
 }
 
-function delFromJSON(subject, type, content) {
+function delFromJSON(subject, type, content, expDate) {
     try {
-        let file = editJsonFile(formatDate() + `.json`)
-        if (type == "hw")
-            file.pop(subject + ".hw", content)
-        else if (type == "test")
-            file.pop(subject + ".test", content)
+        let file = editJsonFile('db/' + formatDate() + `.json`)
+        if (Date.parse(expDate) != NaN)
+            expDate = new Date(expDate)
+        if (type == "hw") {
+            if (expDate != NaN) {
+                file.pop(subject + ".hw", [content, expDate])
+            } else {
+                file.pop(subject + ".hw", [content, ""])
+            }
+        } else if (type == "test")
+            if (expDate != NaN) {
+                file.pop(subject + ".test", [content, expDate])
+            } else {
+                file.pop(subject + ".test", [content, ""])
+            }
         file.save()
     } catch (e) {
         return e
@@ -214,7 +285,7 @@ function delFromJSON(subject, type, content) {
 function reinitialise() {
     if (checkExist() == true) {
         try {
-            fs.unlinkSync(formatDate() + ".json")
+            fs.unlinkSync('db/' + formatDate() + ".json")
             writeEmpty()
         } catch (e) {
             console.log(e)
@@ -250,7 +321,7 @@ setInterval(delUnused, 120000)
 delUnused()
 
 function listDir() {
-    var y = fs.readdirSync(__dirname)
+    var y = fs.readdirSync(path.join(__dirname, '/db'))
     var p = ""
     for (var z = 0; z < y.length; z++) {
         p += y[z].toString() + "\n"

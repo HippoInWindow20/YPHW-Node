@@ -1,0 +1,62 @@
+{
+            "chinese": {
+                "hw": [],
+                "test": []
+            },
+            "math": {
+                "hw": [],
+                "test": []
+            },
+            "eng": {
+                "hw": [],
+                "test": []
+            },
+            "pe": {
+                "hw": [],
+                "test": []
+            },
+            "topic": {
+                "hw": [],
+                "test": []
+            },
+            "physics": {
+                "hw": [],
+                "test": []
+            },
+            "chemistry": {
+                "hw": [],
+                "test": []
+            },
+            "biology": {
+                "hw": [],
+                "test": []
+            },
+            "geo": {
+                "hw": [],
+                "test": []
+            },
+            "earth": {
+                "hw": [],
+                "test": []
+            },
+            "history": {
+                "hw": [],
+                "test": []
+            },
+            "engcon": {
+                "hw": [],
+                "test": []
+            },
+            "defence": {
+                "hw": [],
+                "test": []
+            },
+            "cs": {
+                "hw": [],
+                "test": []
+            },
+            "other": {
+                "hw": [],
+                "test": []
+            }
+        }
