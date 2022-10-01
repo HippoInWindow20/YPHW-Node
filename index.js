@@ -15,7 +15,7 @@ const server = http.createServer(function(request, response) {
             //When data is received
             body += data
         })
-        request.on('data', function() {
+        request.on('end', function() {
             response.setHeader('Access-Control-Allow-Origin', '*');
             response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
             //When receiving finished
@@ -43,18 +43,18 @@ const server = http.createServer(function(request, response) {
                 }
 
             } else if (splitted2[1] == "save") {
-                response.writeHead(200, { 'Content-Type': 'text/html' })
-                response.end(writeToJSON(splitted2[3], splitted2[5], splitted2[7], splitted2[9]) + "\n Method: Save, Subject: " + splitted2[3] + ", Type: " + splitted2[5] + ", Content: " + splitted2[7])
+                response.writeHead(200, { 'Content-Type': 'text/plain' })
+                response.end(writeToJSON(splitted2[3], splitted2[5], splitted2[7], splitted2[9]) + "\nMethod: Save, Subject: " + splitted2[3] + ", Type: " + splitted2[5] + ", Content: " + splitted2[7])
             } else if (splitted2[1] == "del") {
-                response.writeHead(200, { 'Content-Type': 'text/html' })
-                response.end(delFromJSON(splitted2[3], splitted2[5], splitted2[7]) + "\n Method: Delete, Subject: " + splitted2[3] + ", Type: " + splitted2[5] + ", Content: " + splitted2[7])
+                response.writeHead(200, { 'Content-Type': 'text/plain' })
+                response.end(delFromJSON(splitted2[3], splitted2[5], splitted2[7]) + "\nMethod: Delete, Subject: " + splitted2[3] + ", Type: " + splitted2[5] + ", Content: " + splitted2[7])
             } else if (splitted2[1] == "reinitialise") {
                 reinitialise()
-                response.writeHead(200, { 'Content-Type': 'text/html' })
-                response.end("Method: Reinitialise at " + new Date().toDateString())
+                response.writeHead(200, { 'Content-Type': 'text/plain' })
+                response.end("Method: Reinitialisation at " + new Date().toDateString())
             } else if (splitted2[1] == "listdir") {
-                response.writeHead(200, { 'Content-Type': 'text/html' })
-                response.end("Method: List Directory \n " + listDir())
+                response.writeHead(200, { 'Content-Type': 'text/plain' })
+                response.end("Method: List Directory \n" + listDir())
             } else if (splitted2[1] == "previous") {
 
                 var pathDB = path.join(__dirname, '/db')
@@ -90,12 +90,12 @@ const server = http.createServer(function(request, response) {
                         console.log("Invalid Index: " + e)
                     }
                 } else if (splitted2[5].toString() == "true") {
-                    response.writeHead(200, { 'Content-Type': 'text/html' })
+                    response.writeHead(200, { 'Content-Type': 'text/plain' })
                     var p = ""
                     for (var z = 0; z < arr2.length; z++) {
                         p += arr2[z].toString() + "\n"
                     }
-                    respp = "Method: Retrieve Previous 10 Items \n" + p
+                    respp = p
                 }
                 response.end(respp)
             }
@@ -111,7 +111,7 @@ const server = http.createServer(function(request, response) {
                 <body style='font-family: sans-serif'>
                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
                     <h1>Node server YPHS-HW</h1>
-                    <h3>Ver 1.1 2022-10-1</h3>
+                    <h3 style='color: blue'>Ver 1.1 2022-10-1</h3>
                 </body>
             </html>`
         response.writeHead(200, { 'Content-Type': 'text/html' })
@@ -230,6 +230,7 @@ function writeEmpty() {
         })
     }
 }
+delUnused()
 
 writeEmpty()
 setInterval(checkExist, 120000)
@@ -306,20 +307,20 @@ function compareDates(datestring) {
 }
 
 function delUnused() {
-    var arr = fs.readdirSync(__dirname, { withFileTypes: false })
+    var arr = fs.readdirSync(path.join('db'), { withFileTypes: false })
     for (var i = 0; i < arr.length; i++) {
         if (compareDates(arr[i]) > 10) {
             try {
-                fs.unlink(arr[i] + ".json")
+                fs.unlinkSync("db/" + arr[i])
             } catch (e) {
-                return e
+                console.error(e)
             }
         }
     }
 }
 
-setInterval(delUnused, 120000)
-delUnused()
+setInterval(delUnused, 1000)
+
 
 function listDir() {
     var y = fs.readdirSync(path.join(__dirname, '/db'))
