@@ -1,7 +1,7 @@
 # YPHW-Node
 
 Tutorial coming soon  
-Here's some simple instruction if you know how to do it  
+Here are some simple instructions if you know how to do it  
 1. Fork this repo to your profie  
 2. Go to render.com and sign up for a new account  
 3. Create a new "Web Server" and for language choose "Node.js", finally choose this repo to clone from  
