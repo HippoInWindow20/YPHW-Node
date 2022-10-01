@@ -12,7 +12,7 @@ function retrieveToday() {
     $.post(url, {
         function: "retrieve"
     }, function(result) {
-        return result
+        $("#result").html(JSON.stringify(result))
     });
 }
 
@@ -20,7 +20,7 @@ function copyToToday() {
     $.post(url, {
         function: "copytotoday"
     }, function(result) {
-        console.log(result)
+        $("#result").html(result)
     });
 }
 
@@ -35,7 +35,7 @@ function saveData(subject, type, content, expDate) {
         content: content,
         expDate: expDate
     }, function(result) {
-        console.log(result)
+        $("#result").html(result)
     });
 }
 
@@ -50,7 +50,7 @@ function delData(subject, type, content, expDate) {
         content: content,
         expDate: expDate
     }, function(result) {
-        console.log(result)
+        $("#result").html(result)
     });
 }
 
@@ -58,7 +58,7 @@ function reinitialise() {
     $.post(url, {
         function: "reinitialise"
     }, function(result) {
-        console.log(result)
+        $("#result").html(result)
     });
 }
 
@@ -66,7 +66,7 @@ function listDir() {
     $.post(url, {
         function: "listdir"
     }, function(result) {
-        return result
+        $("#result").html(result)
     });
 }
 
@@ -76,10 +76,10 @@ function retrievePrevious(index, listall) {
         index: parseInt(index),
         listall: listall
     }, function(result) {
-        if (listall)
-            console.log(result)
+        if (listall.toString() == "true")
+            $("#result").html(result)
         else
-            return result
+            $("#result").html(JSON.stringify(result))
     });
 }
 
@@ -89,7 +89,6 @@ function getContents(subject, type) {
     $.post(url, {
         function: "retrieve"
     }, function(result) {
-        console.log(result[subject][type])
-        return result[subject][type]
+        $("#result").html(JSON.stringify(result[subject][type]))
     });
 }

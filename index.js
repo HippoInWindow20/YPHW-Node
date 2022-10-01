@@ -1,3 +1,4 @@
+process.env.TZ = 'Asia/Taipei'
 const http = require('http')
 const fs = require('fs')
 const editJsonFile = require("edit-json-file");
@@ -44,10 +45,12 @@ const server = http.createServer(function(request, response) {
 
             } else if (splitted2[1] == "save") {
                 response.writeHead(200, { 'Content-Type': 'text/plain' })
-                response.end(writeToJSON(splitted2[3], splitted2[5], splitted2[7], splitted2[9]) + "\nMethod: Save, Subject: " + splitted2[3] + ", Type: " + splitted2[5] + ", Content: " + splitted2[7])
+                writeToJSON(splitted2[3], splitted2[5], splitted2[7], splitted2[9])
+                response.end("Method: Save, Subject: " + splitted2[3] + ", Type: " + splitted2[5] + ", Content: " + splitted2[7])
             } else if (splitted2[1] == "del") {
                 response.writeHead(200, { 'Content-Type': 'text/plain' })
-                response.end(delFromJSON(splitted2[3], splitted2[5], splitted2[7]) + "\nMethod: Delete, Subject: " + splitted2[3] + ", Type: " + splitted2[5] + ", Content: " + splitted2[7])
+                delFromJSON(splitted2[3], splitted2[5], splitted2[7])
+                response.end("Method: Delete, Subject: " + splitted2[3] + ", Type: " + splitted2[5] + ", Content: " + splitted2[7])
             } else if (splitted2[1] == "reinitialise") {
                 reinitialise()
                 response.writeHead(200, { 'Content-Type': 'text/plain' })
@@ -98,6 +101,13 @@ const server = http.createServer(function(request, response) {
                     respp = p
                 }
                 response.end(respp)
+            } else if (splitted2[1] == "copytotoday") {
+                response.writeHead(200, { 'Content-Type': 'text/plain' })
+                var res = copyPreviousToCurrent()
+                response.end(res)
+            } else {
+                response.writeHead(200, { 'Content-Type': 'text/plain' })
+                response.end("Error: Invalid Request")
             }
         })
     } else {
@@ -241,7 +251,7 @@ function writeToJSON(subject, type, content, expDate) {
     try {
         let file = editJsonFile('db/' + formatDate() + `.json`)
         if (Date.parse(expDate) != NaN)
-            expDate = new Date(expDate)
+            expDate = new Date(expDate) + ""
         if (type == "hw") {
             if (expDate != NaN) {
                 file.append(subject + ".hw", [content, expDate])
@@ -265,7 +275,7 @@ function delFromJSON(subject, type, content, expDate) {
     try {
         let file = editJsonFile('db/' + formatDate() + `.json`)
         if (Date.parse(expDate) != NaN)
-            expDate = new Date(expDate)
+            expDate = new Date(expDate) + ""
         if (type == "hw") {
             if (expDate != NaN) {
                 file.pop(subject + ".hw", [content, expDate])
@@ -329,4 +339,38 @@ function listDir() {
         p += y[z].toString() + "\n"
     }
     return p
+}
+
+function copyPreviousToCurrent() {
+    var pathDB = path.join(__dirname, '/db')
+    var y = fs.readdirSync(pathDB)
+    var arr = []
+    for (var x = 0; x < y.length; x++) {
+        if (path.extname(y[x]) == ".json") {
+            arr.push(y[x])
+        }
+    }
+    var arr2 = []
+
+    for (var k = arr.length - 1; k >= arr.length - 10; k--) {
+        arr2[arr.length - k - 1] = arr[k]
+    }
+    var respp
+    try {
+        respp = fs.readFileSync('db/' + arr2[1], 'utf8', (err, data) => {
+            if (err) {
+                console.error(err)
+                return
+            }
+            return data
+        })
+    } catch (e) {
+        console.log("Invalid Index: " + e)
+    }
+    fs.writeFile('db/' + formatDate() + '.json', respp, err => {
+        if (err) {
+            console.error(err)
+        }
+    })
+    return "Copied " + arr2[1] + " to " + formatDate() + ".json"
 }

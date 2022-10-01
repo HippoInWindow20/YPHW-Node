@@ -10,12 +10,56 @@
         button {
             display: block;
         }
+        
+        body {
+            font-family: sans-serif;
+        }
     </style>
 </head>
 
 <body>
+    <h1>Server Test</h1>
+    <hr />
+    <button onclick="retrieveToday()">Retrieve Today</button>
+    <button onclick="copyToToday()">Copy Last To Today</button>
+    <select id="subject">
+        <option value="chinese">chinese</option>
+        <option value="math">math</option>
+        <option value="eng">eng</option>
+        <option value="pe">pe</option>
+        <option value="topic">topic</option>
+        <option value="physics">physics</option>
+        <option value="chemistry">chemistry</option>
+        <option value="biology">biology</option>
+        <option value="geo">geo</option>
+        <option value="earth">earth</option>
+        <option value="history">history</option>
+        <option value="engcon">engcon</option>
+        <option value="defence">defence</option>
+        <option value="cs">cs</option>
+        <option value="other">other</option>
+    </select>
+    <select id="type">
+        <option value="hw">hw</option>
+        <option value="test">test</option>
+    </select>
+    <input id="content" placeholder="Content" />
+    <input type="date" id="expDate" name="expDate">
+    <button onclick="saveData($('#subject').val(),$('#type').val(),$('#content').val(),$('#expDate').val())">Save Data</button>
+    <button onclick="delData($('#subject').val(),$('#type').val(),$('#content').val(),$('#expDate').val())">Delete Data</button>
+    <button onclick="reinitialise()">Reinitialise</button>
+    <button onclick="listDir()">List Database Directory</button>
+    <input type="number" id="index" min="0" placeholder="Index" />
+    <select id="listall">
+        <option value="true">List All</option>
+        <option value="false">Don't List All</option>
+    </select>
+    <button onclick="retrievePrevious($('#index').val(),$('#listall').val())">Retrieve Previous</button>
+    <button onclick="getContents($('#subject').val(),$('#type').val())">Get Contents</button>
+    <!-- <button onclick="console.clear()">Clear Console</button> -->
+    <p id="result"></p>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="client.js"></script>
+    <script src="client-html.js"></script>
 </body>
 
 </html>
