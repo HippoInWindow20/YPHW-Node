@@ -1,4 +1,4 @@
-var isLocal = true
+var isLocal = false
 var url
 if (isLocal == true) {
     url = "http://localhost:3000"
