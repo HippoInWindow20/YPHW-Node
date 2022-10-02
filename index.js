@@ -121,7 +121,7 @@ const server = http.createServer(function(request, response) {
                 <body style='font-family: sans-serif'>
                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
                     <h1>Node server YPHS-HW</h1>
-                    <h3 style='color: blue'>Ver 1.1 2022-10-1</h3>
+                    <h3 style='color: green'>Ver 1.2 2022-10-2</h3>
                 </body>
             </html>`
         response.writeHead(200, { 'Content-Type': 'text/html' })
@@ -242,7 +242,7 @@ function writeEmpty() {
 }
 delUnused()
 
-writeEmpty()
+//writeEmpty()
 setInterval(checkExist, 120000)
 
 
