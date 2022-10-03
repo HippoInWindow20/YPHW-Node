@@ -1,8 +1,4 @@
 process.env.TZ = 'Asia/Taipei'
-process.env.url = "student.yphs.tp.edu.tw"
-process.env.user = "za10755143"
-process.env.pw = "z940918"
-process.env.secure = false
 const http = require('http')
 const fs = require('fs')
 const editJsonFile = require("edit-json-file");
