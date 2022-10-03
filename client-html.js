@@ -3,7 +3,7 @@ var url
 if (isLocal == true) {
     url = "http://localhost:3000"
 } else {
-    url = "https://yphw-node.onrender.com/"
+    url = "http://yphw-node.shippohsu.repl.co/"
 }
 //Server implements JQuery library by default
 

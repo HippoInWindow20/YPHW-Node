@@ -424,15 +424,15 @@ function uploadSyncWithFTP() {
 }
 
 function downloadSyncWithFTP() {
-    new ftpdump({
-            host: process.env.url,
-            port: 21,
-            user: process.env.user,
-            password: process.env.pw,
-            root: "db"
-        }, "/db", function(err) {
-            if (err) return console.log(err);
-        })
+    // new ftpdump({
+    //         host: process.env.url,
+    //         port: 21,
+    //         user: process.env.user,
+    //         password: process.env.pw,
+    //         root: "db"
+    //     }, "/db", function(err) {
+    //         if (err) return console.log(err);
+    //     })
         // var connection = {
         //     host: process.env.url,
         //     port: 21,
