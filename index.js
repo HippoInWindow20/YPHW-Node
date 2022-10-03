@@ -7,8 +7,8 @@ const http = require('http')
 const fs = require('fs')
 const editJsonFile = require("edit-json-file");
 const path = require('path')
-    // const ftpdump = require("ftpdump");
-const dFtp = require('dump-ftp');
+const ftpdump = require("ftpdump");
+// const dFtp = require('dump-ftp');
 const FtpDeploy = require('ftp-deploy');
 const ftpDeploy = new FtpDeploy();
 
@@ -424,22 +424,22 @@ function uploadSyncWithFTP() {
 }
 
 function downloadSyncWithFTP() {
-    // new ftpdump({
-    //     host: process.env.url,
-    //     port: 21,
-    //     user: process.env.user,
-    //     password: process.env.pw,
-    //     root: "db"
-    // }, "/db", function(err) {
-    //     if (err) return console.log(err);
-    // })
-    var connection = {
-        host: process.env.url,
-        port: 21,
-        user: process.env.user,
-        password: process.env.pw,
-        root: 'db'
-    };
+    new ftpdump({
+            host: process.env.url,
+            port: 21,
+            user: process.env.user,
+            password: process.env.pw,
+            root: "db"
+        }, "/db", function(err) {
+            if (err) return console.log(err);
+        })
+        // var connection = {
+        //     host: process.env.url,
+        //     port: 21,
+        //     user: process.env.user,
+        //     password: process.env.pw,
+        //     root: 'db'
+        // };
 
-    var dump = new dFtp(connection).dump();
+    // var dump = new dFtp(connection).dump();
 }
