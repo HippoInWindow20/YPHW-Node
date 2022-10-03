@@ -5,90 +5,125 @@ if (isLocal == true) {
 } else {
     url = "https://yphw-node.onrender.com/"
 }
-
 //Server implements JQuery library by default
 
 function retrieveToday() {
-    $.post(url, {
-        function: "retrieve"
-    }, function(result) {
-        $("#result").html(JSON.stringify(result))
-    });
+    var xmlhttp = new XMLHttpRequest();
+    var theUrl = "http://localhost:3000";
+    xmlhttp.open("POST", theUrl);
+    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xmlhttp.send(JSON.stringify({ "function": "retrieve" }));
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            // res = xmlhttp.responseText.replace("\n", "")
+            // res = res.replace("\r", "")
+            $("#result").html(xmlhttp.responseText);
+        }
+    };
 }
 
 function copyToToday() {
-    $.post(url, {
-        function: "copytotoday"
-    }, function(result) {
-        $("#result").html(result)
-    });
+    var xmlhttp = new XMLHttpRequest();
+    var theUrl = "http://localhost:3000";
+    xmlhttp.open("POST", theUrl);
+    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xmlhttp.send(JSON.stringify({ "function": "copytotoday" }));
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+
+            $("#result").html(xmlhttp.responseText);
+        }
+    };
 }
 
 function saveData(subject, type, content, expDate) {
     if (expDate) {} else {
         expDate = ""
     }
-    $.post(url, {
-        function: "save",
-        subject: subject,
-        type: type,
-        content: content,
-        expDate: expDate
-    }, function(result) {
-        $("#result").html(result)
-    });
+    var xmlhttp = new XMLHttpRequest();
+    var theUrl = "http://localhost:3000";
+    xmlhttp.open("POST", theUrl);
+    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xmlhttp.send(JSON.stringify({ "function": "save", "subject": subject, "type": type, "content": content, "expDate": expDate }));
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+
+            $("#result").html(xmlhttp.responseText);
+        }
+    };
 }
 
 function delData(subject, type, content, expDate) {
     if (expDate) {} else {
         expDate = ""
     }
-    $.post(url, {
-        function: "del",
-        subject: subject,
-        type: type,
-        content: content,
-        expDate: expDate
-    }, function(result) {
-        $("#result").html(result)
-    });
+    var xmlhttp = new XMLHttpRequest();
+    var theUrl = "http://localhost:3000";
+    xmlhttp.open("POST", theUrl);
+    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xmlhttp.send(JSON.stringify({ "function": "del", "subject": subject, "type": type, "content": content, "expDate": expDate }));
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+
+            $("#result").html(xmlhttp.responseText);
+        }
+    };
 }
 
 function reinitialise() {
-    $.post(url, {
-        function: "reinitialise"
-    }, function(result) {
-        $("#result").html(result)
-    });
+    var xmlhttp = new XMLHttpRequest();
+    var theUrl = "http://localhost:3000";
+    xmlhttp.open("POST", theUrl);
+    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xmlhttp.send(JSON.stringify({ "function": "reinitialise" }));
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+
+            $("#result").html(xmlhttp.responseText);
+        }
+    };
 }
 
 function listDir() {
-    $.post(url, {
-        function: "listdir"
-    }, function(result) {
-        $("#result").html(result)
-    });
+    var xmlhttp = new XMLHttpRequest();
+    var theUrl = "http://localhost:3000";
+    xmlhttp.open("POST", theUrl);
+    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xmlhttp.send(JSON.stringify({ "function": "listdir" }));
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+
+            $("#result").html(xmlhttp.responseText);
+        }
+    };
 }
 
 function retrievePrevious(index, listall) {
-    $.post(url, {
-        function: "previous",
-        index: parseInt(index),
-        listall: listall
-    }, function(result) {
-        if (listall.toString() == "true")
-            $("#result").html(result)
-        else
-            $("#result").html(JSON.stringify(result))
-    });
+    var xmlhttp = new XMLHttpRequest();
+    var theUrl = "http://localhost:3000";
+    xmlhttp.open("POST", theUrl);
+    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xmlhttp.send(JSON.stringify({ "function": "previous", "index": index, "listall": listall }));
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            $("#result").html(xmlhttp.responseText)
+        }
+    };
 }
 
 //Process data
 function getContents(subject, type) {
 
-    $.post(url, {
-        function: "retrieve"
-    }, function(result) {
-        $("#result").html(JSON.stringify(result[subject][type]))
-    });
+    var xmlhttp = new XMLHttpRequest();
+    var theUrl = "http://localhost:3000";
+    xmlhttp.open("POST", theUrl);
+    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xmlhttp.send(JSON.stringify({ "function": "retrieve" }));
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            // res = xmlhttp.responseText.replace("\n", "")
+            // res = res.replace("\r", "")
+            $("#result").html(JSON.parse(xmlhttp.responseText)[subject][type]);
+        }
+    };
 }

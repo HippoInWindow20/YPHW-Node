@@ -1,12 +1,26 @@
 process.env.TZ = 'Asia/Taipei'
+process.env.url = "student.yphs.tp.edu.tw"
+process.env.user = "za10755143"
+process.env.pw = "z940918"
+process.env.secure = false
 const http = require('http')
 const fs = require('fs')
 const editJsonFile = require("edit-json-file");
 const path = require('path')
+const ftpdump = require("ftpdump");
+const FtpDeploy = require('ftp-deploy');
+const ftpDeploy = new FtpDeploy();
+
+var downloadStarted = null
+var downloadEnded = null
+var uploadStarted = null
+var uploadEnded = null
 
 const server = http.createServer(function(request, response) {
-    console.dir(request.param)
-
+    // console.dir(request.param)
+    response.setHeader('Access-Control-Allow-Origin', '*');
+    response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    response.setHeader('Access-Control-Allow-Headers', '*');
     if (request.method == 'POST') {
         var body = ''
         request.setEncoding("utf8");
@@ -17,19 +31,11 @@ const server = http.createServer(function(request, response) {
             body += data
         })
         request.on('end', function() {
-            response.setHeader('Access-Control-Allow-Origin', '*');
-            response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-            //When receiving finished
-            postData = decodeURIComponent(body);
 
-            // response.end(postData)
-            var splitted = postData.split("&")
-            var splitted2 = []
-            for (var x = 0; x < splitted.length; x++) {
-                splitted2.push(splitted[x].split("=")[0])
-                splitted2.push(splitted[x].split("=")[1])
-            }
-            if (splitted2[1] == "retrieve") {
+            //When receiving finished
+            postData = JSON.parse(body);
+
+            if (postData.function == "retrieve") {
                 if (checkExist() == false) {
                     response.end("File does not exist")
                 } else {
@@ -43,22 +49,22 @@ const server = http.createServer(function(request, response) {
                     })
                 }
 
-            } else if (splitted2[1] == "save") {
+            } else if (postData.function == "save") {
                 response.writeHead(200, { 'Content-Type': 'text/plain' })
-                writeToJSON(splitted2[3], splitted2[5], splitted2[7], splitted2[9])
-                response.end("Method: Save, Subject: " + splitted2[3] + ", Type: " + splitted2[5] + ", Content: " + splitted2[7])
-            } else if (splitted2[1] == "del") {
+                writeToJSON(postData.subject, postData.type, postData.content, postData.expDate)
+                response.end("Method: Save, Subject: " + postData.subject + ", Type: " + postData.type + ", Content: " + postData.content)
+            } else if (postData.function == "del") {
                 response.writeHead(200, { 'Content-Type': 'text/plain' })
-                delFromJSON(splitted2[3], splitted2[5], splitted2[7])
-                response.end("Method: Delete, Subject: " + splitted2[3] + ", Type: " + splitted2[5] + ", Content: " + splitted2[7])
-            } else if (splitted2[1] == "reinitialise") {
+                delFromJSON(postData.subject, postData.type, postData.content)
+                response.end("Method: Delete, Subject: " + postData.subject + ", Type: " + postData.type + ", Content: " + postData.content)
+            } else if (postData.function == "reinitialise") {
                 reinitialise()
                 response.writeHead(200, { 'Content-Type': 'text/plain' })
                 response.end("Method: Reinitialisation at " + new Date().toDateString())
-            } else if (splitted2[1] == "listdir") {
+            } else if (postData.function == "listdir") {
                 response.writeHead(200, { 'Content-Type': 'text/plain' })
                 response.end("Method: List Directory \n" + listDir())
-            } else if (splitted2[1] == "previous") {
+            } else if (postData.function == "previous") {
 
                 var pathDB = path.join(__dirname, '/db')
                 var y = fs.readdirSync(pathDB)
@@ -79,10 +85,10 @@ const server = http.createServer(function(request, response) {
                     }
                 }
                 var respp
-                if (splitted2[5].toString() == "false") {
+                if (postData.listall.toString() == "false") {
                     try {
                         response.writeHead(200, { 'Content-Type': 'application/json' })
-                        respp = fs.readFileSync('db/' + arr2[splitted2[3]], 'utf8', (err, data) => {
+                        respp = fs.readFileSync('db/' + arr2[postData.index], 'utf8', (err, data) => {
                             if (err) {
                                 console.error(err)
                                 return
@@ -92,7 +98,7 @@ const server = http.createServer(function(request, response) {
                     } catch (e) {
                         console.log("Invalid Index: " + e)
                     }
-                } else if (splitted2[5].toString() == "true") {
+                } else if (postData.listall.toString() == "true") {
                     response.writeHead(200, { 'Content-Type': 'text/plain' })
                     var p = ""
                     for (var z = 0; z < arr2.length; z++) {
@@ -101,7 +107,7 @@ const server = http.createServer(function(request, response) {
                     respp = p
                 }
                 response.end(respp)
-            } else if (splitted2[1] == "copytotoday") {
+            } else if (postData.function == "copytotoday") {
                 response.writeHead(200, { 'Content-Type': 'text/plain' })
                 var res = copyPreviousToCurrent()
                 response.end(res)
@@ -168,6 +174,7 @@ function formatDate() {
 
 
 function writeEmpty() {
+    downloadSyncWithFTP()
     if (checkExist() == false) {
         const content = `{
             "chinese": {
@@ -239,15 +246,17 @@ function writeEmpty() {
             // file written successfully
         })
     }
+    uploadSyncWithFTP()
 }
 delUnused()
 
 //writeEmpty()
-setInterval(checkExist, 120000)
+setInterval(checkExist, 5000)
 
 
 //parse JSON
 function writeToJSON(subject, type, content, expDate) {
+    downloadSyncWithFTP()
     try {
         let file = editJsonFile('db/' + formatDate() + `.json`)
         if (Date.parse(expDate) != NaN)
@@ -269,9 +278,11 @@ function writeToJSON(subject, type, content, expDate) {
     } catch (e) {
         return e
     }
+    uploadSyncWithFTP()
 }
 
 function delFromJSON(subject, type, content, expDate) {
+    downloadSyncWithFTP()
     try {
         let file = editJsonFile('db/' + formatDate() + `.json`)
         if (Date.parse(expDate) != NaN)
@@ -292,9 +303,11 @@ function delFromJSON(subject, type, content, expDate) {
     } catch (e) {
         return e
     }
+    uploadSyncWithFTP()
 }
 
 function reinitialise() {
+    downloadSyncWithFTP()
     if (checkExist() == true) {
         try {
             fs.unlinkSync('db/' + formatDate() + ".json")
@@ -304,7 +317,7 @@ function reinitialise() {
         }
 
     }
-
+    uploadSyncWithFTP()
 }
 
 //Manage files
@@ -317,6 +330,7 @@ function compareDates(datestring) {
 }
 
 function delUnused() {
+    downloadSyncWithFTP()
     var arr = fs.readdirSync(path.join('db'), { withFileTypes: false })
     for (var i = 0; i < arr.length; i++) {
         if (compareDates(arr[i]) > 10) {
@@ -327,12 +341,14 @@ function delUnused() {
             }
         }
     }
+    uploadSyncWithFTP()
 }
 
-setInterval(delUnused, 1000)
+setInterval(delUnused, 120000)
 
 
 function listDir() {
+    downloadSyncWithFTP()
     var y = fs.readdirSync(path.join(__dirname, '/db'))
     var p = ""
     for (var z = 0; z < y.length; z++) {
@@ -342,6 +358,7 @@ function listDir() {
 }
 
 function copyPreviousToCurrent() {
+    downloadSyncWithFTP()
     var pathDB = path.join(__dirname, '/db')
     var y = fs.readdirSync(pathDB)
     var arr = []
@@ -372,6 +389,7 @@ function copyPreviousToCurrent() {
             console.error(err)
         }
     })
+    uploadSyncWithFTP()
     return "Copied " + arr2[1] + " to " + formatDate() + ".json"
 }
 
@@ -380,29 +398,38 @@ function copyPreviousToCurrent() {
 
 TODO: Migrate current File System functions to FTP-Based
 
-const ftp = require("basic-ftp") 
-// ESM: import * as ftp from "basic-ftp"
+*/
 
-example()
+function uploadSyncWithFTP() {
+    var config = {
+        user: process.env.user, // NOTE that this was username in 1.x 
+        password: process.env.pw, // optional, prompted if none given
+        host: process.env.url,
+        port: 21,
+        localRoot: __dirname + '/db',
+        remoteRoot: 'db/',
+        include: ['*'], // this would upload everything except dot files
+        exclude: [], // e.g. exclude sourcemaps - ** exclude: [] if nothing to exclude **
+        deleteRemote: false, // delete ALL existing files at destination before uploading, if true
+        forcePasv: true // Passive mode is forced (EPSV command is not sent)
+    }
 
-async function example() {
-    const client = new ftp.Client()
-    client.ftp.verbose = true
-    try {
-        await client.access({
-            host: "myftpserver.com",
-            user: "very",
-            password: "password",
-            secure: true
-        })
-        console.log(await client.list())
-        await client.uploadFrom("README.md", "README_FTP.md")
-        await client.downloadTo("README_COPY.md", "README_FTP.md")
-    }
-    catch(err) {
-        console.log(err)
-    }
-    client.close()
+
+    // use with callback
+    ftpDeploy.deploy(config, function(err, res) {
+        if (err) console.log(err)
+        else console.log('finished:', res);
+    });
 }
 
-*/
+function downloadSyncWithFTP() {
+    new ftpdump({
+        host: process.env.url,
+        port: 21,
+        user: process.env.user,
+        password: process.env.pw,
+        root: "db"
+    }, "/db", function(err) {
+        if (err) return console.log(err);
+    })
+}
