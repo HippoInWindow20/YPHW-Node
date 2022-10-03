@@ -402,25 +402,25 @@ TODO: Migrate current File System functions to FTP-Based
 */
 
 function uploadSyncWithFTP() {
-    var config = {
-        user: process.env.user, // NOTE that this was username in 1.x 
-        password: process.env.pw, // optional, prompted if none given
-        host: process.env.url,
-        port: 21,
-        localRoot: __dirname + '/db',
-        remoteRoot: 'db/',
-        include: ['*'], // this would upload everything except dot files
-        exclude: [], // e.g. exclude sourcemaps - ** exclude: [] if nothing to exclude **
-        deleteRemote: false, // delete ALL existing files at destination before uploading, if true
-        forcePasv: true // Passive mode is forced (EPSV command is not sent)
-    }
+    // var config = {
+    //     user: process.env.user, // NOTE that this was username in 1.x 
+    //     password: process.env.pw, // optional, prompted if none given
+    //     host: process.env.url,
+    //     port: 21,
+    //     localRoot: __dirname + '/db',
+    //     remoteRoot: 'db/',
+    //     include: ['*'], // this would upload everything except dot files
+    //     exclude: [], // e.g. exclude sourcemaps - ** exclude: [] if nothing to exclude **
+    //     deleteRemote: false, // delete ALL existing files at destination before uploading, if true
+    //     forcePasv: true // Passive mode is forced (EPSV command is not sent)
+    // }
 
 
-    // use with callback
-    ftpDeploy.deploy(config, function(err, res) {
-        if (err) console.log(err)
-        else console.log('finished:', res);
-    });
+    // // use with callback
+    // ftpDeploy.deploy(config, function(err, res) {
+    //     if (err) console.log(err)
+    //     else console.log('finished:', res);
+    // });
 }
 
 function downloadSyncWithFTP() {
@@ -433,13 +433,13 @@ function downloadSyncWithFTP() {
     //     }, "/db", function(err) {
     //         if (err) return console.log(err);
     //     })
-        // var connection = {
-        //     host: process.env.url,
-        //     port: 21,
-        //     user: process.env.user,
-        //     password: process.env.pw,
-        //     root: 'db'
-        // };
+    // var connection = {
+    //     host: process.env.url,
+    //     port: 21,
+    //     user: process.env.user,
+    //     password: process.env.pw,
+    //     root: 'db'
+    // };
 
     // var dump = new dFtp(connection).dump();
 }
