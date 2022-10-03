@@ -1,9 +1,14 @@
 process.env.TZ = 'Asia/Taipei'
+process.env.url = "student.yphs.tp.edu.tw"
+process.env.user = "za10755143"
+process.env.pw = "z940918"
+process.env.secure = false
 const http = require('http')
 const fs = require('fs')
 const editJsonFile = require("edit-json-file");
 const path = require('path')
-const ftpdump = require("ftpdump");
+    // const ftpdump = require("ftpdump");
+const dFtp = require('dump-ftp');
 const FtpDeploy = require('ftp-deploy');
 const ftpDeploy = new FtpDeploy();
 
@@ -419,13 +424,22 @@ function uploadSyncWithFTP() {
 }
 
 function downloadSyncWithFTP() {
-    new ftpdump({
+    // new ftpdump({
+    //     host: process.env.url,
+    //     port: 21,
+    //     user: process.env.user,
+    //     password: process.env.pw,
+    //     root: "db"
+    // }, "/db", function(err) {
+    //     if (err) return console.log(err);
+    // })
+    var connection = {
         host: process.env.url,
         port: 21,
         user: process.env.user,
         password: process.env.pw,
-        root: "db"
-    }, "/db", function(err) {
-        if (err) return console.log(err);
-    })
+        root: 'db'
+    };
+
+    var dump = new dFtp(connection).dump();
 }
