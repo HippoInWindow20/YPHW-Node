@@ -7,43 +7,174 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>檢視聯絡簿</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
 </head>
 
-<body>
-    <h1>檢視聯絡簿</h1>
-    <button style="display: block" onclick="collapseAll()">全部收合</button>
-    <div class="subjectBlock">
-        <div class="subject">國文</div>
-        <div class="item">你好</div>
-        <div class="item">你好</div>
-        <div class="item">你好</div>
+<body style="overflow: hidden;margin: 0">
+    <div class="container">
+        <div class="subject">聯絡簿</div>
+        <div class="subjectBlock" onclick="showDialog('chinese')">
+            <div class="subject">國文</div>
+            <div class="remaining">1項作業 · 2項考試</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+        </div>
+        <div class="subjectBlock" onclick="showDialog('math')">
+            <div class="subject">數學</div>
+            <div class="remaining invis">1項作業 · 2項考試</div>
+        </div>
+        <div class="subjectBlock" onclick="showDialog('english')">
+            <div class="subject">英文</div>
+            <div class="remaining">1項作業 · 2項考試</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+        </div>
+        <div class="subjectBlock" onclick="showDialog('pe')">
+            <div class="subject">體育</div>
+            <div class="remaining">1項作業 · 2項考試</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+        </div>
+        <div class="subjectBlock" onclick="showDialog('topic')">
+            <div class="subject">議題</div>
+            <div class="remaining">1項作業 · 2項考試</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+        </div>
+        <div class="subjectBlock" onclick="showDialog('physics')">
+            <div class="subject">物理</div>
+            <div class="remaining">1項作業 · 2項考試</div>
+            <div class="item">fuck</div>
+            <div class="item">fuck</div>
+            <div class="item">fuck</div>
+        </div>
+        <div class="subjectBlock" onclick="showDialog('chemistry')">
+            <div class="subject">化學</div>
+            <div class="remaining">1項作業 · 2項考試</div>
+        </div>
+        <div class="subjectBlock" onclick="showDialog('biology')">
+            <div class="subject">生物</div>
+            <div class="remaining">1項作業 · 2項考試</div>
+            <div class="item">你好</div>
+        </div>
+        <div class="subjectBlock" onclick="showDialog('geo')">
+            <div class="subject">地理</div>
+            <div class="remaining">1項作業 · 2項考試</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+        </div>
+        <div class="subjectBlock" onclick="showDialog('earth')">
+            <div class="subject">地科</div>
+            <div class="remaining">1項作業 · 2項考試</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+        </div>
+        <div class="subjectBlock" onclick="showDialog('history')">
+            <div class="subject">歷史</div>
+            <div class="remaining">1項作業 · 2項考試</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+        </div>
+        <div class="subjectBlock" onclick="showDialog('engcon')">
+            <div class="subject">英會</div>
+            <div class="remaining">1項作業 · 2項考試</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+        </div>
+        <div class="subjectBlock" onclick="showDialog('defence')">
+            <div class="subject">國防</div>
+            <div class="remaining">1項作業 · 2項考試</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+            <div class="item">你好</div>
+        </div>
+        <div class="subjectBlock" onclick="showDialog('cs')">
+            <div class="subject">資訊</div>
+            <div class="remaining">1項作業 · 2項考試</div>
+            <div class="item">fuck</div>
+            <div class="item">fuck</div>
+            <div class="item">fuck</div>
+        </div>
+        <div class="subjectBlock" onclick="showDialog('other')">
+            <div class="subject">其他</div>
+            <div class="remaining invis">1項作業 · 2項考試</div>
+        </div>
     </div>
-    <div class="subjectBlock">數學</div>
-    <div class="subjectBlock">英文</div>
-    <div class="subjectBlock">體育</div>
-    <div class="subjectBlock">議題</div>
-    <div class="subjectBlock">
-        <div class="subject">物理</div>
-        <div class="item">fuck</div>
-        <div class="item">fuck</div>
-        <div class="item">fuck</div>
+    <button class="btnCollapse" onclick="collapseAll()">
+        <span id="colIcon" class="material-symbols-outlined" style="font-size: 40px;">
+        unfold_more
+        </span>
+    </button>
+    <div id="overlay" class="overlay"></div>
+    <div id="details" class="details">
+        <div class="innerSubject">國文</div>
+        <table style="width: 100%">
+            <tbody>
+                <tr>
+                    <td style="width: 50%">
+                        <div class="innerCategory">功課：</div>
+                        <div id="list">
+                            <ul class="list">
+                                <li>
+                                    <div class="liMain">Coffee</div>
+                                    <div class="liDate">Coffee</div>
+                                </li>
+
+                                <li>
+                                    <div class="liMain">Coffee</div>
+                                    <div class="liDate">Coffee</div>
+                                </li>
+                                <li>
+                                    <div class="liMain">Coffee</div>
+                                    <div class="liDate">Coffee</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td style="width: 50%">
+                        <div class="innerCategory">考試：</div>
+                        <div id="list">
+                            <ul class="list">
+                                <li>
+                                    <div class="liMain">Coffee</div>
+                                    <div class="liDate">Coffee</div>
+                                </li>
+
+                                <li>
+                                    <div class="liMain">Coffee</div>
+                                    <div class="liDate">Coffee</div>
+                                </li>
+                                <li>
+                                    <div class="liMain">Coffee</div>
+                                    <div class="liDate">Coffee</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="dismiss" onclick="dismissDialog()">關閉</button>
     </div>
-    <div class="subjectBlock">化學</div>
-    <div class="subjectBlock">生物</div>
-    <div class="subjectBlock">地理</div>
-    <div class="subjectBlock">地科</div>
-    <div class="subjectBlock">歷史</div>
-    <div class="subjectBlock">英會</div>
-    <div class="subjectBlock">國防</div>
-    <div class="subjectBlock">
-        <div class="subject">資訊</div>
-        <div class="item">fuck</div>
-        <div class="item">fuck</div>
-        <div class="item">fuck</div>
-    </div>
-    <div class="subjectBlock">其他</div>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <script src="client.js"></script>
+    <script src="view.js"></script>
 </body>
 
 </html>

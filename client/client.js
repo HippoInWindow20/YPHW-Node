@@ -120,20 +120,3 @@ function getContents(subject, type) {
         }
     };
 }
-
-var collapsed = false
-
-function collapseAll() {
-    var x = document.getElementsByClassName("item");
-    if (collapsed == false) {
-        for (var y = 0; y < x.length; y++) {
-            $(x[y]).slideUp();
-        }
-        collapsed = true
-    } else {
-        for (var y = 0; y < x.length; y++) {
-            $(x[y]).slideDown();
-        }
-        collapsed = false
-    }
-}
