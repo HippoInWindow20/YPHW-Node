@@ -3,7 +3,7 @@ var theUrl
 if (isLocal == true) {
     theUrl = "http://localhost:3000"
 } else {
-    theUrl = "http://yphw-node.shippohsu.repl.co/"
+    theUrl = "https://yphw-node.shippohsu.repl.co/"
 }
 //Server implements JQuery library by default
 
@@ -119,4 +119,21 @@ function getContents(subject, type) {
             return JSON.parse(xmlhttp.responseText)[subject][type]
         }
     };
+}
+
+var collapsed = true
+
+function collapseAll() {
+    var x = document.getElementsByClassName("item");
+    if (collapsed == false) {
+        for (var y = 0; y < x.length; y++) {
+            $(x[y]).slideUp();
+        }
+        collapsed = true
+    } else {
+        for (var y = 0; y < x.length; y++) {
+            $(x[y]).slideDown();
+        }
+        collapsed = false
+    }
 }

@@ -3,7 +3,7 @@ var theUrl
 if (isLocal == true) {
     theUrl = "http://localhost:3000"
 } else {
-    theUrl = "http://yphw-node.shippohsu.repl.co/"
+    theUrl = "https://yphw-node.shippohsu.repl.co/"
 }
 //Server implements JQuery library by default
 

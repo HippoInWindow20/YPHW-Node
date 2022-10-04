@@ -1,0 +1,13 @@
+.subjectBlock {
+    display: inline-block;
+    background: #EEE;
+    margin: 5px 5px;
+    width: 300px;
+    height: auto
+}
+
+.item {
+    background: white;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
