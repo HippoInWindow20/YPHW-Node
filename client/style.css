@@ -19,6 +19,7 @@
 
 .subjectBlock:active {
     background: #D0D0D0;
+    margin-top: -0.01%;
     /* border-radius: 70px; */
 }
 
