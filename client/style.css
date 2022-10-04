@@ -3,11 +3,12 @@
     background: #EEE;
     margin: 5px 5px;
     width: 300px;
-    height: auto
+    height: auto;
+    vertical-align: top;
 }
 
 .item {
     background: white;
-    border: 1px solid black;
+    border: none;
     border-collapse: collapse;
 }

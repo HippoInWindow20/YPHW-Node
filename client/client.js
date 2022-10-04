@@ -121,7 +121,7 @@ function getContents(subject, type) {
     };
 }
 
-var collapsed = true
+var collapsed = false
 
 function collapseAll() {
     var x = document.getElementsByClassName("item");
