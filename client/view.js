@@ -34,9 +34,19 @@ $("#placeholder").show()
 document.getElementById("placeholder").style.top = "calc(50% - " + (document.getElementById("placeholder").getBoundingClientRect().height / 2) + "px)"
 
 var Query = setInterval(retrieveToday, 2000);
-if (JSON.stringify(cache) !== "Failed"){
-    $("#overlay").fadeOut(300)
-    $("#placeholder").fadeOut(300)
-    clearInterval(Query)
-}
+// while (true){
+ var y = setInterval(function () {
+    if (success){
+        $("#overlay").fadeOut(300)
+        $("#placeholder").fadeOut(300)
+        clearInterval(Query)
+        countItems(cache,"chinese")
+        clearInterval(y)
+    }
+},1000)
+// }
 
+function countItems(json, subject){
+    var temp = json[subject]
+    document.getElementById(subject).innerHTML = temp.hw.length + "項功課 · "+ temp.test.length + "項考試"
+}

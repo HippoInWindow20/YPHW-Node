@@ -6,6 +6,7 @@ if (isLocal == true) {
     theUrl = "https://yphw-node.shippohsu.repl.co/"
 }
 //Server implements JQuery library by default
+var success = false;
 
 function retrieveToday() {
     try{
@@ -17,10 +18,10 @@ function retrieveToday() {
         xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 cache = JSON.parse(xmlhttp.responseText)
+                success = true
             }
         };
     }catch (e){
-        cache = "Failed"
     }
 }
 
