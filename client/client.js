@@ -8,16 +8,20 @@ if (isLocal == true) {
 //Server implements JQuery library by default
 
 function retrieveToday() {
-    var xmlhttp = new XMLHttpRequest();
+    try{
+        var xmlhttp = new XMLHttpRequest();
 
-    xmlhttp.open("POST", theUrl);
-    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xmlhttp.send(JSON.stringify({ "function": "retrieve" }));
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            return JSON.parse(xmlhttp.responseText)
-        }
-    };
+        xmlhttp.open("POST", theUrl);
+        xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xmlhttp.send(JSON.stringify({ "function": "retrieve" }));
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                cache = JSON.parse(xmlhttp.responseText)
+            }
+        };
+    }catch (e){
+        cache = "Failed"
+    }
 }
 
 function copyToToday() {

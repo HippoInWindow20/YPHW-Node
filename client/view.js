@@ -27,3 +27,16 @@ function showDialog() {
     $("#details").fadeIn(300)
     document.getElementById("details").style.top = "calc(50% - " + (document.getElementById("details").getBoundingClientRect().height / 2) + "px)"
 }
+
+var cache
+$("#overlay").show()
+$("#placeholder").show()
+document.getElementById("placeholder").style.top = "calc(50% - " + (document.getElementById("placeholder").getBoundingClientRect().height / 2) + "px)"
+
+var Query = setInterval(retrieveToday, 2000);
+if (JSON.stringify(cache) !== "Failed"){
+    $("#overlay").fadeOut(300)
+    $("#placeholder").fadeOut(300)
+    clearInterval(Query)
+}
+
