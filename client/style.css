@@ -25,7 +25,7 @@
 
 .subject {
     padding: 20px;
-    font-size: 30px;
+    font-size: 40px;
     font-weight: bold;
     font-family: 'Plus Jakarta Sans', sans-serif;
 }
@@ -34,7 +34,7 @@
     padding-left: 20px;
     padding-top: 0px;
     padding-bottom: 20px;
-    font-size: 20px;
+    font-size: 25px;
     font-family: 'Plus Jakarta Sans', sans-serif;
     opacity: 0.6
 }
@@ -43,8 +43,8 @@
     background: #EEE;
     border: none;
     border-collapse: collapse;
-    padding: 20px;
-    font-size: 20px;
+    padding: 25px 20px;
+    font-size: 30px;
     font-family: 'Plus Jakarta Sans', sans-serif;
     display: none;
 }
@@ -115,7 +115,7 @@
 .innerCategory {
     padding: 10px 0;
     padding-bottom: 0px;
-    font-size: 20px;
+    font-size: 25px;
     font-weight: bold;
     font-family: 'Plus Jakarta Sans', sans-serif
 }
