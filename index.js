@@ -21,7 +21,7 @@ const server = http.createServer(function(request, response) {
     // console.dir(request.param)
     response.setHeader('Access-Control-Allow-Origin', '*');
     response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    response.setHeader('Access-Control-Allow-Headers', '*');
+    response.setHeader('Access-Control-Allow-Headers', 'Content-Type, *');
     if (request.method == 'POST') {
         var body = ''
         request.setEncoding("utf8");

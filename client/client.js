@@ -9,7 +9,7 @@ if (isLocal == true) {
 var success = false;
 
 function retrieveToday() {
-    try{
+    try {
         var xmlhttp = new XMLHttpRequest();
 
         xmlhttp.open("POST", theUrl);
@@ -17,12 +17,17 @@ function retrieveToday() {
         xmlhttp.send(JSON.stringify({ "function": "retrieve" }));
         xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                cache = JSON.parse(xmlhttp.responseText)
-                success = true
+                if (xmlhttp.responseText !== "File does not exist") {
+                    cache = JSON.parse(xmlhttp.responseText)
+                    success = true
+                } else {
+                    copyToToday()
+                    reinitialise()
+                    retrieveToday()
+                }
             }
         };
-    }catch (e){
-    }
+    } catch (e) {}
 }
 
 function copyToToday() {

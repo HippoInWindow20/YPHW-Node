@@ -27,7 +27,7 @@
     padding: 20px;
     font-size: 30px;
     font-weight: bold;
-    font-family: sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 .remaining {
@@ -35,7 +35,7 @@
     padding-top: 0px;
     padding-bottom: 20px;
     font-size: 20px;
-    font-family: sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     opacity: 0.6
 }
 
@@ -45,7 +45,7 @@
     border-collapse: collapse;
     padding: 20px;
     font-size: 20px;
-    font-family: sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     display: none;
 }
 
@@ -109,7 +109,7 @@
     padding-bottom: 20px;
     font-size: 40px;
     font-weight: bolder;
-    font-family: sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif
 }
 
 .innerCategory {
@@ -117,18 +117,18 @@
     padding-bottom: 0px;
     font-size: 20px;
     font-weight: bold;
-    font-family: sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif
 }
 
 .liMain {
     font-size: 25px;
-    font-family: sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     padding-top: 15px;
 }
 
 .liDate {
     font-size: 20px;
-    font-family: sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     padding-top: 5px;
     opacity: 0.6
 }
