@@ -1,17 +1,28 @@
 var collapsed = true
 var subject = ["chinese", "math", "eng", "pe", "topic", "physics", "chemistry", "biology", "geo", "earth", "history", "engcon", "defence", "cs", "other"]
 
-function collapseAll() {
-    var x = document.getElementsByClassName("item");
+function collapseAll(hwState, testState) {
+    var x = document.getElementsByClassName("item hw");
+    var zz = document.getElementsByClassName("item test");
     if (collapsed == false) {
         for (var y = 0; y < x.length; y++) {
             $(x[y]).slideUp(250, "swing");
         }
+        for (var l = 0; l < zz.length; l++) {
+            $(zz[l]).slideUp(250, "swing");
+        }
         collapsed = true
         document.getElementById("colIcon").innerHTML = "unfold_more"
     } else {
-        for (var y = 0; y < x.length; y++) {
-            $(x[y]).slideDown(250, "swing");
+        if (hwState == "on") {
+            for (var y = 0; y < x.length; y++) {
+                $(x[y]).slideDown(250, "swing");
+            }
+        }
+        if (testState == "on") {
+            for (var j = 0; j < zz.length; j++) {
+                $(zz[j]).slideDown(250, "swing");
+            }
         }
         collapsed = false
         document.getElementById("colIcon").innerHTML = "unfold_less"
@@ -83,14 +94,60 @@ var y = setInterval(function() {
 
 function countItems(json, subject) {
     var temp = json[subject]
-    document.getElementById(subject).innerHTML = temp.hw.length + "項功課 · " + temp.test.length + "項考試"
+    document.getElementById(subject).innerHTML = ""
+    if (temp.hw.length !== 0)
+        document.getElementById(subject).innerHTML += temp.hw.length + " 項功課<br>"
+    if (temp.test.length !== 0)
+        document.getElementById(subject).innerHTML += temp.test.length + " 項考試"
+
     if (temp.hw.length == 0 && temp.test.length == 0)
         document.getElementById(subject).parentNode.style.display = "none"
+
+
 }
 
 function enterList(json, subject) {
     var temp = json[subject].hw
+    var temp2 = json[subject].test
     for (var x = 0; x < temp.length; x++) {
-        document.getElementById(subject).parentNode.innerHTML += "<div class='item'>" + temp[x][0] + "</div>"
+        document.getElementById(subject).parentNode.innerHTML += "<div class='item hw'>" + temp[x][0] + "</div>"
     }
+    for (var y = 0; y < temp2.length; y++) {
+        document.getElementById(subject).parentNode.innerHTML += "<div class='item test'>" + temp2[y][0] + "</div>"
+    }
+}
+
+function toggleShow(id) {
+    if (document.getElementById(id).dataset.state == "on") {
+        document.getElementById(id).dataset.state = "off"
+        document.getElementById(id).classList.add("unchecked")
+    } else {
+        document.getElementById(id).dataset.state = "on"
+        document.getElementById(id).classList.remove("unchecked")
+    }
+    if (collapsed == false) {
+        collapseAll(document.getElementById('hwCheck').dataset.state, document.getElementById('testCheck').dataset.state)
+        collapseAll(document.getElementById('hwCheck').dataset.state, document.getElementById('testCheck').dataset.state)
+    }
+}
+
+var timer = 0
+var time = setInterval(function() {
+    timer = timer + 1
+    if (timer >= 300) {
+        window.location.reload()
+        clearInterval(time)
+    }
+}, 1000)
+
+var timer2 = 0
+setInterval(function() {
+    timer2 = timer2 + 1
+    tempTime2 = (timer2 - (timer2 % 60)) / 60
+    document.getElementById("lastRefresh").innerHTML = tempTime2 + " 分鐘前"
+}, 1000)
+
+//Detect user input
+function resetTimer() {
+    timer = 0
 }
