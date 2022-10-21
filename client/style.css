@@ -36,6 +36,12 @@
     font-size: 40px;
     font-weight: 400;
     font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
+    transition: 0.2s;
+    opacity: 1
+}
+
+.unhighlight {
+    opacity: 0.5
 }
 
 .remaining {

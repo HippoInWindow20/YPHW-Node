@@ -130,3 +130,7 @@ function getContents(subject, type) {
         }
     };
 }
+
+function switchFeature(feature) {
+
+}
